@@ -21,6 +21,7 @@ public class WEWBlocks {
 
     public static final RegistryObject<Block> TUNGSTEN_BLOCK = registerBlock("tungsten_block", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(9f).requiresCorrectToolForDrops()), WEWCreativeModeTab.WEWTAB);
     public static final RegistryObject<Block> TUNGSTEN_ORE = registerBlock("tungsten_ore", () -> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(5f).requiresCorrectToolForDrops()), WEWCreativeModeTab.WEWTAB);
+    public static final RegistryObject<Block> DEEPSLATE_TUNGSTEN_ORE = registerBlock("deepslate_tungsten_ore", () -> new Block(BlockBehaviour.Properties.of(Material.STONE).strength(6f).requiresCorrectToolForDrops()), WEWCreativeModeTab.WEWTAB);
     private static <T extends Block> RegistryObject<T> registerBlock(String bName, Supplier<T> block, CreativeModeTab tab){
         RegistryObject<T> ret = WBLOCKS.register(bName, block);
         registerBlockItem(bName, ret, tab);
