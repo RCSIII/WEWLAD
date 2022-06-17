@@ -1,10 +1,14 @@
 package me.wewlad;
 
 import com.mojang.logging.LogUtils;
+import me.wewlad.Blocks.WEWBlocks;
+import me.wewlad.Entities.WEWEntities;
+import me.wewlad.Items.WEWItems;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
@@ -27,11 +31,16 @@ public class WEWLAD {
 
     public WEWLAD() {
         // Register the setup method for mod-loading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(this::setup);
         // Register the enqueueIMC method for mod-loading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
+        modEventBus.addListener(this::enqueueIMC);
         // Register the processIMC method for mod-loading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
+        modEventBus.addListener(this::processIMC);
+
+        WEWItems.register(modEventBus);
+        WEWBlocks.register(modEventBus);
+        WEWEntities.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
