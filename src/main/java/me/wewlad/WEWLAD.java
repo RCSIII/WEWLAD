@@ -1,4 +1,4 @@
-package me.wewlad.wewlad;
+package me.wewlad;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.block.Block;
@@ -37,8 +37,8 @@ public class WEWLAD {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        // Some preinit code
-        LOGGER.info("HELLO FROM PREINIT");
+        // Some pre init code
+        LOGGER.info("HELLO FROM PRE INIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
     }
 
