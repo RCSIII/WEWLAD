@@ -1,5 +1,9 @@
 {
   "item.wewlad.tungsten_ingot": "Tungsten Ingot",
+  "item.wewlad.raw_tungsten": "Raw Tungsten (Wolframite)",
 
-  "block.wewlad.tungsten_block": "Tungsten Block"
+  "block.wewlad.tungsten_block": "Tungsten Block",
+  "block.wewlad.tungsten_ore": "Tungsten Ore (Wolframite)",
+
+  "itemGroup.wewtab": "WEWLAD Items"
 }
