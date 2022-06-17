@@ -1,4 +1,4 @@
-package me.wewlad.items;
+package me.wewlad.Items;
 
 import me.wewlad.WEWLAD;
 import net.minecraft.world.item.Item;
