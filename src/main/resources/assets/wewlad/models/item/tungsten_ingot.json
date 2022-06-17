@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "wewlad:item/tungsten_ingot"
+  }
+}
