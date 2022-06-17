@@ -51,7 +51,7 @@ public class WEWLAD {
     }
 
     private void processIMC(final InterModProcessEvent event) {
-        // Some example code to receive and process InterModComms from other mods
+        // Some example code to receive and process InterModCommunications from other mods
         LOGGER.info("Got IMC {}", event.getIMCStream().
                 map(m -> m.messageSupplier().get()).
                 collect(Collectors.toList()));
