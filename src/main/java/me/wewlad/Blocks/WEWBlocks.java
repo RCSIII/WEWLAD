@@ -3,9 +3,10 @@ package me.wewlad.Blocks;
 import me.wewlad.Items.WEWCreativeModeTab;
 import me.wewlad.Items.WEWItems;
 import me.wewlad.WEWLAD;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
@@ -14,6 +15,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class WEWBlocks {
@@ -30,6 +33,21 @@ public class WEWBlocks {
 
     private static <T extends Block> RegistryObject<Item> registerBlockItem(String iName, RegistryObject<T> block, CreativeModeTab tab){
         return WEWItems.WITEMS.register(iName, () -> new BlockItem(block.get(), new Item.Properties().tab(tab)));
+    }
+
+    private static <T extends Block> RegistryObject<Item> registerBlockItem(String iName, RegistryObject<T> block, CreativeModeTab tab, String toolTipKey){
+        return WEWItems.WITEMS.register(iName, () -> new BlockItem(block.get(), new Item.Properties().tab(tab)){
+            @Override
+            public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pTooltipFlag){
+                pTooltip.add(new TranslatableComponent(toolTipKey));
+            }
+        });
+    }
+
+    private static <T extends Block> RegistryObject<T> registerBlock(String bName, Supplier<T> block, CreativeModeTab tab, String toolTipKey){
+        RegistryObject<T> ret = WBLOCKS.register(bName, block);
+        registerBlockItem(bName, ret, tab, toolTipKey);
+        return ret;
     }
 
     public static void register(IEventBus iebus){
