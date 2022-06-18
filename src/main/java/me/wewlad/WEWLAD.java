@@ -2,8 +2,10 @@ package me.wewlad;
 
 import com.mojang.logging.LogUtils;
 import me.wewlad.Blocks.WEWBlocks;
-import me.wewlad.Entities.WEWEntities;
+import me.wewlad.Entities.Explosives.BaseExplosiveRenderer;
+import me.wewlad.Entities.WEWEntityTypes;
 import me.wewlad.Items.WEWItems;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,6 +35,7 @@ public class WEWLAD {
         // Register the setup method for mod-loading
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::setup);
+        modEventBus.addListener(this::clientSetup);
         // Register the enqueueIMC method for mod-loading
         modEventBus.addListener(this::enqueueIMC);
         // Register the processIMC method for mod-loading
@@ -40,7 +43,7 @@ public class WEWLAD {
 
         WEWItems.register(modEventBus);
         WEWBlocks.register(modEventBus);
-        WEWEntities.register(modEventBus);
+        WEWEntityTypes.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -50,6 +53,10 @@ public class WEWLAD {
         // Some pre init code
         LOGGER.info("HELLO FROM PRE INIT");
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+    }
+
+    private void clientSetup(final FMLCommonSetupEvent event){
+        EntityRenderers.register(WEWEntityTypes.BASE_EXPLOSIVE.get(), BaseExplosiveRenderer::new);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

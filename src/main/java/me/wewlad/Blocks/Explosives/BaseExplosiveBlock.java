@@ -1,5 +1,6 @@
 package me.wewlad.Blocks.Explosives;
 
+import me.wewlad.Entities.Explosives.BaseExplosiveEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,14 +19,12 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -72,10 +71,10 @@ public class BaseExplosiveBlock extends Block {
     @Override
     public void wasExploded(Level pLevel, BlockPos pPos, Explosion pExplosion) {
         if (!pLevel.isClientSide) {
-            PrimedTnt primedtnt = new PrimedTnt(pLevel, (double)pPos.getX() + 0.5D, (double)pPos.getY(), (double)pPos.getZ() + 0.5D, pExplosion.getSourceMob());
-            int i = primedtnt.getFuse();
-            primedtnt.setFuse((short)(pLevel.random.nextInt(i / 4) + i / 8));
-            pLevel.addFreshEntity(primedtnt);
+            BaseExplosiveEntity primedExplosive = new BaseExplosiveEntity(pLevel, (double)pPos.getX() + 0.5D, (double)pPos.getY(), (double)pPos.getZ() + 0.5D, ExplosiveType.DOUBLETNT);
+            int i = primedExplosive.getFuse();
+            primedExplosive.setFuse((short)(pLevel.random.nextInt(i / 4) + i / 8));
+            pLevel.addFreshEntity(primedExplosive);
         }
     }
 
@@ -86,9 +85,9 @@ public class BaseExplosiveBlock extends Block {
     private static void primeExplosive(Level pLevel, BlockPos pPos, @Nullable LivingEntity pEntity) {
         if (!pLevel.isClientSide) {
             pLevel.removeBlock(pPos, false);
-            PrimedTnt primedtnt = new PrimedTnt(pLevel, (double)pPos.getX() + 0.5D, (double)pPos.getY(), (double)pPos.getZ() + 0.5D, pEntity);
-            pLevel.addFreshEntity(primedtnt);
-            pLevel.playSound((Player)null, primedtnt.getX(), primedtnt.getY(), primedtnt.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+            BaseExplosiveEntity primedExplosive = new BaseExplosiveEntity(pLevel, (double)pPos.getX() + 0.5D, (double)pPos.getY(), (double)pPos.getZ() + 0.5D, ExplosiveType.DOUBLETNT);
+            pLevel.addFreshEntity(primedExplosive);
+            pLevel.playSound((Player)null, primedExplosive.getX(), primedExplosive.getY(), primedExplosive.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
             pLevel.gameEvent(pEntity, GameEvent.PRIME_FUSE, pPos);
         }
     }

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "wewlad:block/base_explosive_top",
+    "bottom": "wewlad:block/base_explosive_bottom",
+    "side": "wewlad:block/base_explosive_side"
+  }
+}
