@@ -2,6 +2,7 @@ package me.wewlad.Entities.Explosives;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import me.wewlad.Blocks.WEWBlocks;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -40,7 +41,7 @@ public class BaseExplosiveRenderer extends EntityRenderer<BaseExplosiveEntity> {
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(-90.0F));
         pMatrixStack.translate(-0.5D, -0.5D, 0.5D);
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
-        TntMinecartRenderer.renderWhiteSolidBlock(Blocks.TNT.defaultBlockState(), pMatrixStack, pBuffer, pPackedLight, i / 5 % 2 == 0);
+        TntMinecartRenderer.renderWhiteSolidBlock(WEWBlocks.BASE_EXPLOSIVE.get().defaultBlockState(), pMatrixStack, pBuffer, pPackedLight, i / 5 % 2 == 0);
         pMatrixStack.popPose();
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }
