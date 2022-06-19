@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 public class BaseExplosiveBlockRenderer extends EntityRenderer<BaseExplosiveBlockEntity> {
 
     private BlockState expState = Blocks.TNT.defaultBlockState();
-    private static final Logger LOGGER = LogUtils.getLogger();
+
     public BaseExplosiveBlockRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
         this.shadowRadius = 0.5f;
