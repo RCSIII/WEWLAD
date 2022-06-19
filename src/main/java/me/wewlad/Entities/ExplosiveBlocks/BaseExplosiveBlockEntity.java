@@ -1,7 +1,9 @@
-package me.wewlad.Entities.Explosives;
+package me.wewlad.Entities.ExplosiveBlocks;
 
-import me.wewlad.Blocks.Explosives.ExplosiveType;
+import me.wewlad.Blocks.ExplosiveBlocks.DoubleTNTBlock;
+import me.wewlad.Blocks.ExplosiveBlocks.ExplosiveType;
 import me.wewlad.Entities.WEWEntityTypes;
+import me.wewlad.ExplosiveHandler.ExplosiveHandler;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -12,32 +14,28 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
+public class BaseExplosiveBlockEntity extends Entity {
 
-public class BaseExplosiveEntity extends Entity {
+    private static final EntityDataAccessor<Integer> TIMER_ID = SynchedEntityData.defineId(BaseExplosiveBlockEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> EXP_TYPE = SynchedEntityData.defineId(BaseExplosiveBlockEntity.class, EntityDataSerializers.INT);
 
-    private static final EntityDataAccessor<Integer> TIMER_ID = SynchedEntityData.defineId(BaseExplosiveEntity.class, EntityDataSerializers.INT);
-    private static int expTime = 80;
-    public ExplosiveType expType = ExplosiveType.NONE;
-    public BaseExplosiveEntity(EntityType<? extends BaseExplosiveEntity> pEntityType, Level pLevel) {
+    public BaseExplosiveBlockEntity(EntityType<? extends BaseExplosiveBlockEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.blocksBuilding = true;
-
     }
 
-    public BaseExplosiveEntity(Level level, double x, double y, double z, ExplosiveType explosiveType){
-        this(WEWEntityTypes.BASE_EXPLOSIVE.get(), level);
+    public BaseExplosiveBlockEntity(Level level, double x, double y, double z, int fuseTime, ExplosiveType explosiveType){
+        this(WEWEntityTypes.BASE_EXPLOSIVE_BLOCK.get(), level);
         this.setPos(x, y, z);
         double d0 = level.random.nextDouble() * (double)((float)Math.PI * 2F);
         this.setDeltaMovement(-Math.sin(d0) * 0.02D, 0.2F, -Math.cos(d0) * 0.02D);
-        this.setFuse(expTime);
+        this.setFuse(fuseTime);
         this.xo = x;
         this.yo = y;
         this.zo = z;
-        expType = explosiveType;
+        this.setExpType(explosiveType);
     }
 
     public void tick() {
@@ -68,17 +66,28 @@ public class BaseExplosiveEntity extends Entity {
     }
 
     protected void explode() {
-        this.level.explode(this, this.getX(), this.getY(0.0625D), this.getZ(), 8.0F, Explosion.BlockInteraction.BREAK);
+        ExplosiveHandler.HandleExplosion(this, this.level, this.getX(), this.getY(), this.getZ(), this.getExpType(), "");
     }
 
     public void setFuse(int time){ this.entityData.set(TIMER_ID, time); }
 
     public int getFuse(){ return this.entityData.get((TIMER_ID)); }
 
+    public void setExpType(ExplosiveType expt){
+        this.entityData.set(EXP_TYPE, expt.ordinal());
+    }
+
+    public ExplosiveType getExpType(){
+        return ExplosiveType.values()[this.entityData.get(EXP_TYPE)];
+    }
+
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(TIMER_ID, 80);
+        this.entityData.define(TIMER_ID, 0);
+        this.entityData.define(EXP_TYPE, 0);
     }
+
+
 
     protected Entity.MovementEmission getMovementEmission() {
         return Entity.MovementEmission.NONE;

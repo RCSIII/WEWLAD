@@ -2,7 +2,7 @@ package me.wewlad;
 
 import com.mojang.logging.LogUtils;
 import me.wewlad.Blocks.WEWBlocks;
-import me.wewlad.Entities.Explosives.BaseExplosiveRenderer;
+import me.wewlad.Entities.ExplosiveBlocks.BaseExplosiveBlockRenderer;
 import me.wewlad.Entities.WEWEntityTypes;
 import me.wewlad.Items.WEWItems;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -56,7 +56,7 @@ public class WEWLAD {
     }
 
     private void clientSetup(final FMLCommonSetupEvent event){
-        EntityRenderers.register(WEWEntityTypes.BASE_EXPLOSIVE.get(), BaseExplosiveRenderer::new);
+        EntityRenderers.register(WEWEntityTypes.BASE_EXPLOSIVE_BLOCK.get(), BaseExplosiveBlockRenderer::new);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

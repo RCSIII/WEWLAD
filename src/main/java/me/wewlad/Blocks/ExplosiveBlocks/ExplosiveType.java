@@ -1,8 +1,8 @@
-package me.wewlad.Blocks.Explosives;
+package me.wewlad.Blocks.ExplosiveBlocks;
 
 public enum ExplosiveType {
     NONE,
     DOUBLETNT,
-    QUADRUPLETNT,
+    TNT_STICK,
     C4
 }

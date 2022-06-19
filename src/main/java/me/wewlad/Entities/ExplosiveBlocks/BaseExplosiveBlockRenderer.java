@@ -1,6 +1,7 @@
-package me.wewlad.Entities.Explosives;
+package me.wewlad.Entities.ExplosiveBlocks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.logging.LogUtils;
 import com.mojang.math.Vector3f;
 import me.wewlad.Blocks.WEWBlocks;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -10,15 +11,26 @@ import net.minecraft.client.renderer.entity.TntMinecartRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import org.slf4j.Logger;
 
-public class BaseExplosiveRenderer extends EntityRenderer<BaseExplosiveEntity> {
+public class BaseExplosiveBlockRenderer extends EntityRenderer<BaseExplosiveBlockEntity> {
 
-    public BaseExplosiveRenderer(EntityRendererProvider.Context pContext) {
+    private BlockState expState = Blocks.TNT.defaultBlockState();
+    private static final Logger LOGGER = LogUtils.getLogger();
+    public BaseExplosiveBlockRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
         this.shadowRadius = 0.5f;
     }
 
-    public void render(BaseExplosiveEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
+    public void render(BaseExplosiveBlockEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
+        if(expState == Blocks.TNT.defaultBlockState()){
+            switch (pEntity.getExpType()){
+                case DOUBLETNT:
+                    expState = WEWBlocks.DOUBLE_TNT.get().defaultBlockState();
+            }
+        }
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, 0.5D, 0.0D);
         int i = pEntity.getFuse();
@@ -34,13 +46,13 @@ public class BaseExplosiveRenderer extends EntityRenderer<BaseExplosiveEntity> {
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(-90.0F));
         pMatrixStack.translate(-0.5D, -0.5D, 0.5D);
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
-        TntMinecartRenderer.renderWhiteSolidBlock(WEWBlocks.BASE_EXPLOSIVE.get().defaultBlockState(), pMatrixStack, pBuffer, pPackedLight, i / 5 % 2 == 0);
+        TntMinecartRenderer.renderWhiteSolidBlock(expState, pMatrixStack, pBuffer, pPackedLight, i / 5 % 2 == 0);
         pMatrixStack.popPose();
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(BaseExplosiveEntity pEntity) {
+    public ResourceLocation getTextureLocation(BaseExplosiveBlockEntity pEntity) {
         return InventoryMenu.BLOCK_ATLAS;
     }
 }

@@ -1,6 +1,6 @@
-package me.wewlad.Blocks.Explosives;
+package me.wewlad.Blocks.ExplosiveBlocks;
 
-import me.wewlad.Entities.Explosives.BaseExplosiveEntity;
+import me.wewlad.Entities.ExplosiveBlocks.BaseExplosiveBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -9,7 +9,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
@@ -30,7 +29,7 @@ import javax.annotation.Nullable;
 
 public class BaseExplosiveBlock extends Block {
     public static final BooleanProperty UNSTABLE = BlockStateProperties.UNSTABLE;
-    public ExplosiveType expType = ExplosiveType.NONE;
+    public static ExplosiveType expType = ExplosiveType.NONE;
 
     public BaseExplosiveBlock(Properties properties, ExplosiveType explosiveType) {
         super(properties);
@@ -71,21 +70,17 @@ public class BaseExplosiveBlock extends Block {
     @Override
     public void wasExploded(Level pLevel, BlockPos pPos, Explosion pExplosion) {
         if (!pLevel.isClientSide) {
-            BaseExplosiveEntity primedExplosive = new BaseExplosiveEntity(pLevel, (double)pPos.getX() + 0.5D, (double)pPos.getY(), (double)pPos.getZ() + 0.5D, ExplosiveType.DOUBLETNT);
+            BaseExplosiveBlockEntity primedExplosive = new BaseExplosiveBlockEntity(pLevel, (double)pPos.getX() + 0.5D, (double)pPos.getY(), (double)pPos.getZ() + 0.5D, 80, expType);
             int i = primedExplosive.getFuse();
             primedExplosive.setFuse((short)(pLevel.random.nextInt(i / 4) + i / 8));
             pLevel.addFreshEntity(primedExplosive);
         }
     }
 
-    public static void primeExplosive(Level pLevel, BlockPos pPos) {
-        primeExplosive(pLevel, pPos, (LivingEntity)null);
-    }
-
-    private static void primeExplosive(Level pLevel, BlockPos pPos, @Nullable LivingEntity pEntity) {
+    public void primeExplosive(Level pLevel, BlockPos pPos, @Nullable LivingEntity pEntity) {
         if (!pLevel.isClientSide) {
             pLevel.removeBlock(pPos, false);
-            BaseExplosiveEntity primedExplosive = new BaseExplosiveEntity(pLevel, (double)pPos.getX() + 0.5D, (double)pPos.getY(), (double)pPos.getZ() + 0.5D, ExplosiveType.DOUBLETNT);
+            BaseExplosiveBlockEntity primedExplosive = new BaseExplosiveBlockEntity(pLevel, (double)pPos.getX() + 0.5D, (double)pPos.getY(), (double)pPos.getZ() + 0.5D, 80, expType);
             pLevel.addFreshEntity(primedExplosive);
             pLevel.playSound((Player)null, primedExplosive.getX(), primedExplosive.getY(), primedExplosive.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
             pLevel.gameEvent(pEntity, GameEvent.PRIME_FUSE, pPos);
@@ -126,6 +121,10 @@ public class BaseExplosiveBlock extends Block {
             }
         }
 
+    }
+
+    public static void explode(Entity pEntity, Level level, double x, double y, double z) {
+        level.explode(pEntity, x, y, z, 0.0F, Explosion.BlockInteraction.NONE);
     }
 
     @Override
