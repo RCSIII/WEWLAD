@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.entity.TntMinecartRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.level.block.Blocks;
 
 public class BaseExplosiveRenderer extends EntityRenderer<BaseExplosiveEntity> {
 

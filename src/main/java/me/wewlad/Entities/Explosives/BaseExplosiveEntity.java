@@ -32,7 +32,7 @@ public class BaseExplosiveEntity extends Entity {
         this(WEWEntityTypes.BASE_EXPLOSIVE.get(), level);
         this.setPos(x, y, z);
         double d0 = level.random.nextDouble() * (double)((float)Math.PI * 2F);
-        this.setDeltaMovement(-Math.sin(d0) * 0.02D, (double)0.2F, -Math.cos(d0) * 0.02D);
+        this.setDeltaMovement(-Math.sin(d0) * 0.02D, 0.2F, -Math.cos(d0) * 0.02D);
         this.setFuse(expTime);
         this.xo = x;
         this.yo = y;
