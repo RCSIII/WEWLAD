@@ -70,7 +70,7 @@ public class BaseExplosiveBlock extends Block {
     @Override
     public void wasExploded(Level pLevel, BlockPos pPos, Explosion pExplosion) {
         if (!pLevel.isClientSide) {
-            BaseExplosiveBlockEntity primedExplosive = new BaseExplosiveBlockEntity(pLevel, (double)pPos.getX() + 0.5D, (double)pPos.getY(), (double)pPos.getZ() + 0.5D, 80, expType);
+            BaseExplosiveBlockEntity primedExplosive = new BaseExplosiveBlockEntity(pLevel, (double)pPos.getX() + 0.5D, pPos.getY(), (double)pPos.getZ() + 0.5D, 80, expType);
             int i = primedExplosive.getFuse();
             primedExplosive.setFuse((short)(pLevel.random.nextInt(i / 4) + i / 8));
             pLevel.addFreshEntity(primedExplosive);
@@ -80,9 +80,9 @@ public class BaseExplosiveBlock extends Block {
     public void primeExplosive(Level pLevel, BlockPos pPos, @Nullable LivingEntity pEntity) {
         if (!pLevel.isClientSide) {
             pLevel.removeBlock(pPos, false);
-            BaseExplosiveBlockEntity primedExplosive = new BaseExplosiveBlockEntity(pLevel, (double)pPos.getX() + 0.5D, (double)pPos.getY(), (double)pPos.getZ() + 0.5D, 80, expType);
+            BaseExplosiveBlockEntity primedExplosive = new BaseExplosiveBlockEntity(pLevel, (double)pPos.getX() + 0.5D, pPos.getY(), (double)pPos.getZ() + 0.5D, 80, expType);
             pLevel.addFreshEntity(primedExplosive);
-            pLevel.playSound((Player)null, primedExplosive.getX(), primedExplosive.getY(), primedExplosive.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+            pLevel.playSound(null, primedExplosive.getX(), primedExplosive.getY(), primedExplosive.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
             pLevel.gameEvent(pEntity, GameEvent.PRIME_FUSE, pPos);
         }
     }
@@ -98,9 +98,7 @@ public class BaseExplosiveBlock extends Block {
             Item item = itemstack.getItem();
             if (!pPlayer.isCreative()) {
                 if (itemstack.is(Items.FLINT_AND_STEEL)) {
-                    itemstack.hurtAndBreak(1, pPlayer, (p_57425_) -> {
-                        p_57425_.broadcastBreakEvent(pHand);
-                    });
+                    itemstack.hurtAndBreak(1, pPlayer, (p_57425_) -> p_57425_.broadcastBreakEvent(pHand));
                 } else {
                     itemstack.shrink(1);
                 }
