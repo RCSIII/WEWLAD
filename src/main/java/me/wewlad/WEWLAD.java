@@ -2,6 +2,7 @@ package me.wewlad;
 
 import com.mojang.logging.LogUtils;
 import me.wewlad.Blocks.WEWBlocks;
+import me.wewlad.Effect.WEWEffects;
 import me.wewlad.Entities.ExplosiveBlocks.BaseExplosiveBlockRenderer;
 import me.wewlad.Entities.WEWEntityTypes;
 import me.wewlad.Items.WEWItems;
@@ -44,7 +45,7 @@ public class WEWLAD {
         WEWItems.register(modEventBus);
         WEWBlocks.register(modEventBus);
         WEWEntityTypes.register(modEventBus);
-
+        WEWEffects.register(modEventBus);
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
     }
