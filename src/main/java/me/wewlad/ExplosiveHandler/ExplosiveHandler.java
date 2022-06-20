@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.slf4j.Logger;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class ExplosiveHandler {
 
@@ -78,7 +79,54 @@ public class ExplosiveHandler {
         }
     }
 
-    private static void fastExplode2(@Nullable Entity expEntity, Level level, double x, double y, double z, Explosion.BlockInteraction interaction){
+    private static void fastExplode2(@Nullable Entity expEntity, Level level, double x, double y, double z, int radius, Explosion.BlockInteraction interaction){
+        ArrayList<Integer>[] blocks = new ArrayList[radius*radius];
+        ArrayList<Integer>[] points;
+        int  loops = 0, length = radius;
 
+        while(length > 4)
+        {
+            length = length >> 1;
+            loops++;
+        }
+
+        points = new ArrayList[2];
+        points[0].add((int)x+radius);
+        points[1].add((int)x+radius);
+        points[0].add((int)z+radius);
+        points[1].add((int)z+radius);
+
+        for(int i = 0; i < loops; i++)
+        {
+            points = calculatePoints(points, loops-i);
+        }
+
+
+    }
+
+    //add midpoints with their offsets to points
+    private static ArrayList<Integer>[] calculatePoints(ArrayList<Integer>[] points, int offset)
+    {
+        ArrayList<Integer>[] midpoints = calculateMidpoints(points);
+        for(int i = 0; i < midpoints.length; i++)
+        {
+            points[0].add(midpoints[0].get(i)+offset/2);
+            points[1].add(midpoints[1].get(i)+offset-(offset/2));
+        }
+
+        return points;
+    }
+
+    //get midpoints of all existing points
+    private static ArrayList<Integer>[] calculateMidpoints(ArrayList<Integer>[] points)
+    {
+        ArrayList<Integer>[] midPoints = new ArrayList[2];
+        for(int i = 1; i < points.length; i++)
+        {
+            midPoints[0].add((points[0].get(i-1) + points[0].get(i))/2);
+            midPoints[1].add((points[1].get(i-1) + points[1].get(i))/2);
+        }
+
+        return midPoints;
     }
 }

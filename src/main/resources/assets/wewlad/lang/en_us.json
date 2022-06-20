@@ -7,5 +7,8 @@
   "block.wewlad.deepslate_tungsten_ore": "Deepslate Tungsten Ore (Wolframite)",
   "block.wewlad.double_tnt": "Double TNT",
 
-  "itemGroup.wewtab": "WEWLAD Items"
+  "itemGroup.wewtab": "WEWLAD Items",
+
+  "death.attack.phosphorus": "%s burned to death by white phosphorus",
+  "effect.wewlad.phosphorus": "White Phosphorus"
 }

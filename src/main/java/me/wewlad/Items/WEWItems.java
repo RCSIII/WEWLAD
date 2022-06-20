@@ -2,6 +2,7 @@ package me.wewlad.Items;
 
 import me.wewlad.WEWLAD;
 
+import net.minecraft.world.item.HoneyBottleItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
