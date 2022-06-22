@@ -3,6 +3,9 @@
   "values": [
     "wewlad:tungsten_ore",
     "wewlad:deepslate_tungsten_ore",
-    "wewlad:tungsten_block"
+    "wewlad:tungsten_block",
+    "wewlad:sulfur_ore",
+    "wewlad:deepslate_sulfur_ore",
+    "wewlad:sulfur_block"
   ]
 }

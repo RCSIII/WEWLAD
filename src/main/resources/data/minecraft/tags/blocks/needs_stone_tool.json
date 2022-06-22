@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-
+    "wewlad:sulfur_ore",
+    "wewlad:deepslate_sulfur_ore",
+    "wewlad:sulfur_block"
   ]
 }

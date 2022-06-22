@@ -14,5 +14,6 @@ public class WEWOreGeneration {
         List<Holder<PlacedFeature>> base = event.getGeneration().getFeatures(GenerationStep.Decoration.UNDERGROUND_ORES);
 
         base.add(WEWPlacedFeatures.TUNGSTEN_ORE_PLACED);
+        base.add(WEWPlacedFeatures.SULFUR_ORE_PLACED);
     }
 }

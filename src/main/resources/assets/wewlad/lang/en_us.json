@@ -1,10 +1,15 @@
 {
   "item.wewlad.tungsten_ingot": "Tungsten Ingot",
   "item.wewlad.raw_tungsten": "Raw Tungsten (Wolframite)",
-
   "block.wewlad.tungsten_block": "Tungsten Block",
   "block.wewlad.tungsten_ore": "Tungsten Ore (Wolframite)",
   "block.wewlad.deepslate_tungsten_ore": "Deepslate Tungsten Ore (Wolframite)",
+
+  "item.wewlad.sulfur": "Sulfur",
+  "block.wewlad.sulfur_ore": "Sulfur Ore",
+  "block.wewlad.deepslate_sulfur_ore": "Deepslate Sulfur Ore",
+  "block.wewlad.sulfur_block": "Sulfur Block",
+
   "block.wewlad.double_tnt": "Double TNT",
 
   "itemGroup.wewtab": "WEWLAD Items",
