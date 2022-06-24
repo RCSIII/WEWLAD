@@ -33,20 +33,23 @@ public class ExplosiveHandler {
         }
     }
 
-    private static void doubleTNTExplosion(@Nullable Entity expEntity, Level level, double x, double y, double z){
-        fastCircularExplode(expEntity, level, new BlockPos(x,y,z),100, Explosion.BlockInteraction.DESTROY, 1, 0);
+    public static double calcDistance(BlockPos bpo, BlockPos bpt){
+        return Math.sqrt(Math.pow(bpt.getX()-bpo.getX(), 2) + Math.pow(bpt.getY()-bpo.getY(), 2) + Math.pow(bpt.getZ()-bpo.getZ(), 2));
     }
 
-    private static void fastCircularExplode(@Nullable Entity expEntity, Level level, BlockPos expOrigin, int radius, Explosion.BlockInteraction interaction, int expShape, int iteration){
+    private static void doubleTNTExplosion(@Nullable Entity expEntity, Level level, double x, double y, double z){
+        fastCircularExplodeFull(expEntity, level, new BlockPos(x,y,z),100, 2, 0);
+    }
+
+    private static void fastCircularExplodeStripped(@Nullable Entity expEntity, Level level, BlockPos expOrigin, int radius, int expShape, int iteration){
         int nRadius = 0;
-        switch (expShape){
-            case 0: nRadius = radius;
-                    break;
-            case 1: nRadius = radius - iteration;
-                    break;
-            case 2:
-                double angle = Math.sinh((double) iteration/radius);
-                nRadius = (int) Math.round(Math.cos(angle)*radius);
+        switch (expShape) {
+            case 0 -> nRadius = radius;
+            case 1 -> nRadius = radius - iteration;
+            case 2 -> {
+                double angle = Math.sinh((double) iteration / radius);
+                nRadius = (int) Math.round(Math.cos(angle) * radius);
+            }
         }
         double angle;
         int approxXZ;
@@ -55,18 +58,64 @@ public class ExplosiveHandler {
             return;
         }
 
-        for(int h = 0; h <= Math.round(nRadius*0.8); h++){
+        for(int h = 0; h <= Math.round(nRadius*0.75); h++){
             angle = Math.sinh((double) h/nRadius);
             approxXZ = (int) Math.round(Math.cos(angle)*nRadius);
             for(int s = 0; s < switchingArray.length; s++) {
                 for (int xzB = approxXZ; xzB >= 0; xzB--) {
-                    level.setBlock(expOrigin.offset(xzB*switchingArray[s][0], iteration*switchingArray[s][1], h*switchingArray[s][2]), Blocks.AIR.defaultBlockState(), 3);
-                    level.setBlock(expOrigin.offset(h*switchingArray[s][0], iteration*switchingArray[s][1], xzB*switchingArray[s][2]), Blocks.AIR.defaultBlockState(), 3);
+                    level.setBlock(expOrigin.offset(xzB * switchingArray[s][0], iteration * switchingArray[s][1], h * switchingArray[s][2]), Blocks.AIR.defaultBlockState(), 3);
+                    level.setBlock(expOrigin.offset(h * switchingArray[s][0], iteration * switchingArray[s][1], xzB * switchingArray[s][2]), Blocks.AIR.defaultBlockState(), 3);
                 }
             }
         }
 
-        fastCircularExplode(expEntity, level, expOrigin, radius, interaction, expShape, iteration+1);
+        fastCircularExplodeStripped(expEntity, level, expOrigin, radius, expShape, iteration+1);
+    }
+
+    private static void fastCircularExplodeFull(@Nullable Entity expEntity, Level level, BlockPos expOrigin, int radius, int expShape, int iteration){
+        int nRadius = 0;
+        switch (expShape){
+            case 0: nRadius = radius;
+                break;
+            case 1: nRadius = radius - iteration;
+                break;
+            case 2:
+                double angle = Math.sinh((double) iteration/radius);
+                nRadius = (int) Math.round(Math.cos(angle)*radius);
+        }
+        double angle, dist, bExpRes;
+        int approxXZ, exPower;
+        BlockState stateCheck;
+
+        if(iteration == radius){
+            return;
+        }
+
+        for(int h = 0; h <= Math.round(nRadius*0.75); h++){
+            angle = Math.sinh((double) h/nRadius);
+            approxXZ = (int) Math.round(Math.cos(angle)*nRadius);
+            for(int s = 0; s < switchingArray.length; s++) {
+                for (int xzB = approxXZ; xzB >= 0; xzB--) {
+                    stateCheck = level.getBlockState(expOrigin.offset(xzB * switchingArray[s][0], iteration * switchingArray[s][1], h * switchingArray[s][2]));
+                    bExpRes = stateCheck.getExplosionResistance(null,null,null);
+                    dist = calcDistance(expOrigin,expOrigin.offset(xzB * switchingArray[s][0], iteration * switchingArray[s][1], h * switchingArray[s][2]));
+
+                    exPower = (int) ((radius - dist + 1)*100);
+                    if(exPower > bExpRes && !(xzB >= (approxXZ-1) && Math.random() <= 0.5)) {
+                        stateCheck.onBlockExploded(level,expOrigin.offset(xzB * switchingArray[s][0], iteration * switchingArray[s][1], h * switchingArray[s][2]),null);
+                    }
+                    stateCheck = level.getBlockState(expOrigin.offset(h * switchingArray[s][0], iteration * switchingArray[s][1], xzB * switchingArray[s][2]));
+                    bExpRes = stateCheck.getExplosionResistance(null,null,null);
+                    dist = calcDistance(expOrigin,expOrigin.offset(h * switchingArray[s][0], iteration * switchingArray[s][1], xzB * switchingArray[s][2]));
+                    exPower = (int) ((radius - dist + 1)*100);
+                    if(exPower > bExpRes && !(xzB >= (approxXZ-1) && Math.random() <= 0.5)) {
+                        stateCheck.onBlockExploded(level,expOrigin.offset(h * switchingArray[s][0], iteration * switchingArray[s][1], xzB * switchingArray[s][2]),null);
+                    }
+                }
+            }
+        }
+
+        fastCircularExplodeFull(expEntity, level, expOrigin, radius, expShape, iteration+1);
     }
 
     private static void fastExplode2(@Nullable Entity expEntity, Level level, double x, double y, double z, int radius, Explosion.BlockInteraction interaction){
