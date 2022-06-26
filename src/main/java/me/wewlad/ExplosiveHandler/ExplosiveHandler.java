@@ -3,14 +3,17 @@ package me.wewlad.ExplosiveHandler;
 import com.mojang.logging.LogUtils;
 import me.wewlad.Blocks.ExplosiveBlocks.ExplosiveType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import org.slf4j.Logger;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExplosiveHandler {
     public static int[][] switchingArray = {
@@ -86,8 +89,15 @@ public class ExplosiveHandler {
         double angle, dist, bExpRes;
         int approxXZ, exPower;
         BlockState stateCheck;
+        List<Entity> entList;
 
         if(iteration == radius){
+            entList = level.getEntities(expEntity,new AABB(expOrigin.getX()-radius,expOrigin.getY()-radius,expOrigin.getZ()-radius,
+                    expOrigin.getX()+radius,expOrigin.getY()+radius,expOrigin.getZ()+radius));
+            for(int i = 0; i < entList.size(); i++){
+                dist = calcDistance(expOrigin, expOrigin.offset(entList.get(i).getX(),entList.get(i).getY(),entList.get(i).getZ()));
+                entList.get(i).hurt(DamageSource.GENERIC,(float)(radius-dist));
+            }
             return;
         }
 
