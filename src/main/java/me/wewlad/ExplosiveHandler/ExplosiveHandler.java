@@ -95,7 +95,7 @@ public class ExplosiveHandler {
             entList = level.getEntities(expEntity,new AABB(expOrigin.getX()-radius,expOrigin.getY()-radius,expOrigin.getZ()-radius,
                     expOrigin.getX()+radius,expOrigin.getY()+radius,expOrigin.getZ()+radius));
             for(int i = 0; i < entList.size(); i++){
-                dist = calcDistance(expOrigin, expOrigin.offset(entList.get(i).getX(),entList.get(i).getY(),entList.get(i).getZ()));
+                dist = calcDistance(expOrigin, new BlockPos(entList.get(i).getX(),entList.get(i).getY(),entList.get(i).getZ()));
                 entList.get(i).hurt(DamageSource.GENERIC,(float)(radius-dist));
             }
             return;
