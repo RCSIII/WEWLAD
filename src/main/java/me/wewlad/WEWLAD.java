@@ -92,4 +92,8 @@ public class WEWLAD {
             LOGGER.info("HELLO from Register Block");
         }
     }
+
+    public static Logger getLogger() {
+        return LOGGER;
+    }
 }

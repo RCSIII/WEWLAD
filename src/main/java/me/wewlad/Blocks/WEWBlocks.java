@@ -1,6 +1,7 @@
 package me.wewlad.Blocks;
 
 import me.wewlad.Blocks.ExplosiveBlocks.DoubleTNTBlock;
+import me.wewlad.Blocks.ExplosiveBlocks.TestTNTBlock;
 import me.wewlad.Items.WEWCreativeModeTab;
 import me.wewlad.Items.WEWItems;
 import me.wewlad.WEWLAD;
@@ -10,6 +11,7 @@ import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.OreBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -38,6 +40,7 @@ public class WEWBlocks {
     public static final RegistryObject<Block> SULFUR_BLOCK = registerBlock("sulfur_block", () -> new Block(BlockBehaviour.Properties.of(Material.METAL).strength(5f, 5f).requiresCorrectToolForDrops()), WEWCreativeModeTab.WEWTAB);
 
     // Explosives
+    public static final RegistryObject<Block> TEST_TNT = registerBlock("test_tnt", () -> new TestTNTBlock(BlockBehaviour.Properties.of(Material.EXPLOSIVE).strength(1f).sound(SoundType.GRASS)), WEWCreativeModeTab.WEWTAB);
     public static final RegistryObject<Block> DOUBLE_TNT = registerBlock("double_tnt", () -> new DoubleTNTBlock(BlockBehaviour.Properties.of(Material.EXPLOSIVE).strength(1f).sound(SoundType.GRASS)), WEWCreativeModeTab.WEWTAB);
     private static <T extends Block> RegistryObject<T> registerBlock(String bName, Supplier<T> block, CreativeModeTab tab){
         RegistryObject<T> ret = WBLOCKS.register(bName, block);

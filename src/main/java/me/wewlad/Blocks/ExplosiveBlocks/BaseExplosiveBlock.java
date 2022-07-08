@@ -14,6 +14,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -24,12 +25,24 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class BaseExplosiveBlock extends Block {
     public static final BooleanProperty UNSTABLE = BlockStateProperties.UNSTABLE;
-    public static ExplosiveType expType = ExplosiveType.NONE;
+    public ExplosiveType expType;
+    private VoxelShape voxelShape;
+
+    public BaseExplosiveBlock(Properties properties, ExplosiveType explosiveType, VoxelShape shape) {
+        super(properties);
+        expType = explosiveType;
+        voxelShape = shape;
+        this.registerDefaultState(this.defaultBlockState().setValue(UNSTABLE, false));
+    }
 
     public BaseExplosiveBlock(Properties properties, ExplosiveType explosiveType) {
         super(properties);
@@ -133,5 +146,10 @@ public class BaseExplosiveBlock extends Block {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(UNSTABLE);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+        return  voxelShape == null ? Shapes.block() : voxelShape;
     }
 }

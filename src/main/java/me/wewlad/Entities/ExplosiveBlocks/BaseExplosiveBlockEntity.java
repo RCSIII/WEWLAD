@@ -1,9 +1,9 @@
 package me.wewlad.Entities.ExplosiveBlocks;
 
-import me.wewlad.Blocks.ExplosiveBlocks.DoubleTNTBlock;
 import me.wewlad.Blocks.ExplosiveBlocks.ExplosiveType;
 import me.wewlad.Entities.WEWEntityTypes;
 import me.wewlad.ExplosiveHandler.ExplosiveHandler;
+import me.wewlad.WEWLAD;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;

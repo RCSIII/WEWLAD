@@ -27,12 +27,13 @@ public class ExplosiveHandler {
             {-1,-1,-1}
     };
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-
     public static void HandleExplosion(@Nullable Entity expEntity, Level level, double x, double y, double z, ExplosiveType expType, String expModifiers){
         switch (expType){
-            case DOUBLETNT:
+            case DOUBLE_TNT:
                 doubleTNTExplosion(expEntity, level, x, y, z);
+            case TEST_TNT:
+                testTNTExplosion(expEntity, level, x, y, z);
+                break;
         }
     }
 
@@ -42,6 +43,10 @@ public class ExplosiveHandler {
 
     private static void doubleTNTExplosion(@Nullable Entity expEntity, Level level, double x, double y, double z){
         fastCircularExplodeFull(expEntity, level, new BlockPos(x,y,z),100, 2, 0);
+    }
+
+    private static void testTNTExplosion(@Nullable Entity expEntity, Level level, double x, double y, double z){
+        fastCircularExplodeFull(expEntity, level, new BlockPos(x,y,z), 50, 2, 0);
     }
 
     private static void fastCircularExplodeStripped(@Nullable Entity expEntity, Level level, BlockPos expOrigin, int radius, int expShape, int iteration){
@@ -64,10 +69,10 @@ public class ExplosiveHandler {
         for(int h = 0; h <= Math.round(nRadius*0.75); h++){
             angle = Math.sinh((double) h/nRadius);
             approxXZ = (int) Math.round(Math.cos(angle)*nRadius);
-            for(int s = 0; s < switchingArray.length; s++) {
+            for (int[] ints : switchingArray) {
                 for (int xzB = approxXZ; xzB >= 0; xzB--) {
-                    level.setBlock(expOrigin.offset(xzB * switchingArray[s][0], iteration * switchingArray[s][1], h * switchingArray[s][2]), Blocks.AIR.defaultBlockState(), 3);
-                    level.setBlock(expOrigin.offset(h * switchingArray[s][0], iteration * switchingArray[s][1], xzB * switchingArray[s][2]), Blocks.AIR.defaultBlockState(), 3);
+                    level.setBlock(expOrigin.offset(xzB * ints[0], iteration * ints[1], h * ints[2]), Blocks.AIR.defaultBlockState(), 3);
+                    level.setBlock(expOrigin.offset(h * ints[0], iteration * ints[1], xzB * ints[2]), Blocks.AIR.defaultBlockState(), 3);
                 }
             }
         }
@@ -94,9 +99,9 @@ public class ExplosiveHandler {
         if(iteration == radius){
             entList = level.getEntities(expEntity,new AABB(expOrigin.getX()-radius,expOrigin.getY()-radius,expOrigin.getZ()-radius,
                     expOrigin.getX()+radius,expOrigin.getY()+radius,expOrigin.getZ()+radius));
-            for(int i = 0; i < entList.size(); i++){
-                dist = calcDistance(expOrigin, new BlockPos(entList.get(i).getX(),entList.get(i).getY(),entList.get(i).getZ()));
-                entList.get(i).hurt(DamageSource.GENERIC,(float)(radius-dist));
+            for (Entity entity : entList) {
+                dist = calcDistance(expOrigin, new BlockPos(entity.getX(), entity.getY(), entity.getZ()));
+                entity.hurt(DamageSource.GENERIC, (float) (radius - dist));
             }
             return;
         }
@@ -104,22 +109,22 @@ public class ExplosiveHandler {
         for(int h = 0; h <= Math.round(nRadius*0.75); h++){
             angle = Math.sinh((double) h/nRadius);
             approxXZ = (int) Math.round(Math.cos(angle)*nRadius);
-            for(int s = 0; s < switchingArray.length; s++) {
+            for (int[] ints : switchingArray) {
                 for (int xzB = approxXZ; xzB >= 0; xzB--) {
-                    stateCheck = level.getBlockState(expOrigin.offset(xzB * switchingArray[s][0], iteration * switchingArray[s][1], h * switchingArray[s][2]));
-                    bExpRes = stateCheck.getExplosionResistance(null,null,null);
-                    dist = calcDistance(expOrigin,expOrigin.offset(xzB * switchingArray[s][0], iteration * switchingArray[s][1], h * switchingArray[s][2]));
+                    stateCheck = level.getBlockState(expOrigin.offset(xzB * ints[0], iteration * ints[1], h * ints[2]));
+                    bExpRes = stateCheck.getExplosionResistance(null, null, null);
+                    dist = calcDistance(expOrigin, expOrigin.offset(xzB * ints[0], iteration * ints[1], h * ints[2]));
 
-                    exPower = (int) ((radius - dist + 1)*100);
-                    if(exPower > bExpRes && !(xzB >= (approxXZ-1) && Math.random() <= 0.5)) {
-                        stateCheck.onBlockExploded(level,expOrigin.offset(xzB * switchingArray[s][0], iteration * switchingArray[s][1], h * switchingArray[s][2]),null);
+                    exPower = (int) ((radius - dist + 1) * 100);
+                    if (exPower > bExpRes && !(xzB >= (approxXZ - 1) && Math.random() <= 0.5)) {
+                        stateCheck.onBlockExploded(level, expOrigin.offset(xzB * ints[0], iteration * ints[1], h * ints[2]), null);
                     }
-                    stateCheck = level.getBlockState(expOrigin.offset(h * switchingArray[s][0], iteration * switchingArray[s][1], xzB * switchingArray[s][2]));
-                    bExpRes = stateCheck.getExplosionResistance(null,null,null);
-                    dist = calcDistance(expOrigin,expOrigin.offset(h * switchingArray[s][0], iteration * switchingArray[s][1], xzB * switchingArray[s][2]));
-                    exPower = (int) ((radius - dist + 1)*100);
-                    if(exPower > bExpRes && !(xzB >= (approxXZ-1) && Math.random() <= 0.5)) {
-                        stateCheck.onBlockExploded(level,expOrigin.offset(h * switchingArray[s][0], iteration * switchingArray[s][1], xzB * switchingArray[s][2]),null);
+                    stateCheck = level.getBlockState(expOrigin.offset(h * ints[0], iteration * ints[1], xzB * ints[2]));
+                    bExpRes = stateCheck.getExplosionResistance(null, null, null);
+                    dist = calcDistance(expOrigin, expOrigin.offset(h * ints[0], iteration * ints[1], xzB * ints[2]));
+                    exPower = (int) ((radius - dist + 1) * 100);
+                    if (exPower > bExpRes && !(xzB >= (approxXZ - 1) && Math.random() <= 0.5)) {
+                        stateCheck.onBlockExploded(level, expOrigin.offset(h * ints[0], iteration * ints[1], xzB * ints[2]), null);
                     }
                 }
             }
