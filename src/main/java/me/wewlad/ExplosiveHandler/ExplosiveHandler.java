@@ -1,6 +1,5 @@
 package me.wewlad.ExplosiveHandler;
 
-import com.mojang.logging.LogUtils;
 import me.wewlad.Blocks.ExplosiveBlocks.ExplosiveType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
@@ -10,7 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import org.slf4j.Logger;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
