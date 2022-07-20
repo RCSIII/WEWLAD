@@ -30,6 +30,7 @@ public class ExplosiveHandler {
         switch (expType){
             case DOUBLE_TNT:
                 doubleTNTExplosion(expEntity, level, x, y, z);
+                break;
             case TEST_TNT:
                 testTNTExplosion(expEntity, level, x, y, z);
                 break;
@@ -41,11 +42,11 @@ public class ExplosiveHandler {
     }
 
     private static void doubleTNTExplosion(@Nullable Entity expEntity, Level level, double x, double y, double z){
-        fastCircularExplodeFull(expEntity, level, new BlockPos(x,y,z),100, 2, 0);
+        fastCircularExplodeFull(expEntity, level, new BlockPos(x,y,z),5, 2, 0);
     }
 
     private static void testTNTExplosion(@Nullable Entity expEntity, Level level, double x, double y, double z){
-        fastCircularExplodeFull(expEntity, level, new BlockPos(x,y,z), 50, 2, 0);
+        fastCircularExplodeFull(expEntity, level, new BlockPos(x,y,z), 25, 2, 0);
     }
 
     private static void fastCircularExplodeStripped(@Nullable Entity expEntity, Level level, BlockPos expOrigin, int radius, int expShape, int iteration){

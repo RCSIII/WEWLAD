@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BaseExplosiveBlockRenderer extends EntityRenderer<BaseExplosiveBlockEntity> {
 
-    private BlockState expState = Blocks.TNT.defaultBlockState();
+    private BlockState expState = null;
 
     public BaseExplosiveBlockRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
@@ -24,14 +24,10 @@ public class BaseExplosiveBlockRenderer extends EntityRenderer<BaseExplosiveBloc
     }
 
     public void render(BaseExplosiveBlockEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
-        if(expState == Blocks.TNT.defaultBlockState()){
-            switch (pEntity.getExpType()) {
-                case TEST_TNT -> expState = WEWBlocks.TEST_TNT.get().defaultBlockState();
-                case DOUBLE_TNT -> expState = WEWBlocks.DOUBLE_TNT.get().defaultBlockState();
-            }
-            //WEWLAD.getLogger().debug(expState.toString());
+        switch (pEntity.getExpType()) {
+            case TEST_TNT -> expState = WEWBlocks.TEST_TNT.get().defaultBlockState();
+            case DOUBLE_TNT -> expState = WEWBlocks.DOUBLE_TNT.get().defaultBlockState();
         }
-        //WEWLAD.getLogger().debug(expState.toString());
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, 0.5D, 0.0D);
         int i = pEntity.getFuse();
@@ -47,7 +43,6 @@ public class BaseExplosiveBlockRenderer extends EntityRenderer<BaseExplosiveBloc
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(-90.0F));
         pMatrixStack.translate(-0.5D, -0.5D, 0.5D);
         pMatrixStack.mulPose(Vector3f.YP.rotationDegrees(90.0F));
-        WEWLAD.getLogger().debug(pEntity.getExpType().toString());
         TntMinecartRenderer.renderWhiteSolidBlock(expState, pMatrixStack, pBuffer, pPackedLight, i / 5 % 2 == 0);
         pMatrixStack.popPose();
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
